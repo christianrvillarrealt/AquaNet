@@ -7,6 +7,9 @@ const valvulaController = require("../controllers/valvulaController");
 const ledController = require("../controllers/ledController");
 const phController = require("../controllers/phController");
 const waterPumpController = require("../controllers/waterPumpController");
+const heaterController = require("../controllers/heaterController"); // nuevo
+const servoBicarbController = require("../controllers/servoBicarbController"); // nuevo
+
 const router = express.Router();
 
 router.get("/api/getLogs/:deviceID", tempController.getLogs);
@@ -30,4 +33,10 @@ router.post(
   waterPumpController.logWaterPumpState
 );
 
+router.post("/api/logHeater/:deviceID/:status", heaterController.logHeater); // nuevo
 module.exports = router;
+// Nuevo Servo
+router.post(
+  "/api/logServoBicarb/:deviceID",
+  servoBicarbController.logServoBicarb
+);
