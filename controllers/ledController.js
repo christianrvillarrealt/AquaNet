@@ -25,6 +25,27 @@ class LedController {
       res.send("Por favor llena todos los datos!");
     }
   }
+
+  async getLed(req, res) {
+    if (req.params.deviceID != null) {
+      let deviceID = req.params.deviceID;
+      var sql = `SELECT * FROM log_led WHERE device_id = ${deviceID};`;
+      mysql.query(sql, (error, data, fields) => {
+        if (error) {
+          res.status(500);
+          res.send(error.message);
+        } else {
+          console.log(data);
+          res.json({
+            status: 200,
+            data: data,
+          });
+        }
+      });
+    } else {
+      res.send("Por favor llena todos los datos!");
+    }
+  }
 }
 
 const ledController = new LedController();

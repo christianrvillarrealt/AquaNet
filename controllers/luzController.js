@@ -1,12 +1,13 @@
 const mysql = require("../database/db");
+
 class MainController {
-  async logDate(req, res) {
-    console.log(req.query.date);
-    console.log(req.params.deviceID);
-    if (req.params.deviceID != null && req.query.date != null) {
+  async logLuz(req, res) {
+    console.log(req.params.luz);
+    console.log(req.params.deviceId);
+    if (req.params.deviceID != null && req.params.luz != null) {
       let deviceID = req.params.deviceID;
-      let date = req.query.date;
-      var sql = `insert into log_time (device_id, date) values (${deviceID}, '${date}');`;
+      let luz = req.params.luz;
+      var sql = `insert into log_luz (log_date, device_id, luminosidad) values (now(), ${deviceID}, ${luz});`;
       mysql.query(sql, (error, data, fields) => {
         if (error) {
           res.status(500);
@@ -15,7 +16,7 @@ class MainController {
           console.log(data);
           res.json({
             status: 200,
-            message: "Date Log uploaded successfully",
+            message: "Log uploaded successfully",
             affectedRows: data.affectedRows,
           });
         }
@@ -25,11 +26,12 @@ class MainController {
     }
   }
 
-  async getDate(req, res) {
+  async getLuzLogs(req, res) {
+    console.log("Get Logs");
     console.log(req.params.deviceID);
     if (req.params.deviceID != null) {
       let deviceID = req.params.deviceID;
-      var sql = `select * from log_time where device_id = ${deviceID} order by device_id desc;`;
+      var sql = `SELECT * FROM log_luz where device_id='${deviceID}'`;
       mysql.query(sql, (error, data, fields) => {
         if (error) {
           res.status(500);
@@ -37,16 +39,13 @@ class MainController {
         } else {
           console.log(data);
           res.json({
-            status: 200,
-            data: data,
+            data,
           });
         }
       });
-    } else {
-      res.send("Por favor llena todos los datos!");
     }
   }
 }
 
-const dateController = new MainController();
-module.exports = dateController;
+const luzController = new MainController();
+module.exports = luzController;

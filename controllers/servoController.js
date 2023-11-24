@@ -24,6 +24,28 @@ class MainController {
       res.send("Por favor llena todos los datos!");
     }
   }
+
+  async getServo(req, res) {
+    console.log(req.params.deviceID);
+    if (req.params.deviceID != null) {
+      let deviceID = req.params.deviceID;
+      var sql = `select * from log_servo where device_id = ${deviceID} order by device_id desc;`;
+      mysql.query(sql, (error, data, fields) => {
+        if (error) {
+          res.status(500);
+          res.send(error.message);
+        } else {
+          console.log(data);
+          res.json({
+            status: 200,
+            data: data,
+          });
+        }
+      });
+    } else {
+      res.send("Por favor llena todos los datos!");
+    }
+  }
 }
 const servoController = new MainController();
 module.exports = servoController;
